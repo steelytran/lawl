@@ -1,14 +1,13 @@
 #include <dos.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <conio.h>
-#include <stdint.h>
 
 #include "draw.h"
 #include "defs.h"
 #include "colors.h"
 
-extern volatile uint8_t lastkey;
 extern void __interrupt keyisr(void);
 void (__interrupt *oldisr)(void);
 
@@ -17,7 +16,10 @@ uint16_t *clock=(uint16_t*)0x046C;
 int main(void)
 {
 	int i;
-	Mouse minput = {159, 99};
+	int wall[] = {50, 50, 25, 75};
+
+	Coords player = {0, 0};
+	Mouse minput;
 
 	VGA = (uint8_t *)malloc(64000);
 	if (VGA==NULL)exit(1);
@@ -29,12 +31,13 @@ int main(void)
 	set_mode(0x13);
 
 	mouseinit();
+	mousemov(&minput);
 
 	while(lastkey != K_ESC) {
 		memset(VGA, 0, 64000);
 
-		mousemov(&minput);
-		cursor(&minput, crosshair);
+		playerinput(&player, &minput);
+		mapshift(&wall, &player, &minput);
 
                 while ((inp(0x3DA) & 0x08));
                 while (!(inp(0x3DA) & 0x08));

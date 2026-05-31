@@ -105,5 +105,7 @@ extern int cursor1[];
 extern int crosshair[];
 
 void cursor(Mouse *m, int* cursor);
-
+void playerinput(Coords *player, const Mouse *mouse);
+void mapshift(int *wall, const Coords *player, const Mouse *mouse);
+void mapview(const Coords *player, const Mouse *mouse);
 #endif
