@@ -1,9 +1,9 @@
 WATCOM=../../../open-watcom-v2/rel
-CC = wcc
+CC = wcc386
 LINKER = wlink
 
-CFLAGS = -zq -ml -fpc
-LFLAGS = sys dos libpath $(WATCOM)\lib286\dos
+CFLAGS = -zq -mf -3r -fpc
+LFLAGS = sys dos32a op stub=$(WATCOM)/binw/dos32a.exe libpath $(WATCOM)\lib386\dos
 
 MAIN_SRC = main.c
 EXEC = ../a.exe

@@ -15,7 +15,7 @@ void __interrupt keyisr()
 int keychar()
 {
 	regs.h.ah = 0x00;
-	int86(0x16, &regs, &regs);
+	int386(0x16, &regs, &regs);
 	return regs.h.al;
 }
 
@@ -23,10 +23,10 @@ void mousemov(int *x, int *y)
 {
 	static int yaw=0;
 
-	regs.x.ax = 0x0B;
-	int86(0x33, &regs, &regs);
+	regs.w.ax = 0x0B;
+	int386(0x33, &regs, &regs);
 
-	yaw+=(short)regs.x.cx;
+	yaw+=(short)regs.w.cx;
 
 	yaw %= 360;
 	if (yaw<0){yaw+=360;}

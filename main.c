@@ -11,7 +11,7 @@ extern volatile byte lastkey;
 extern void __interrupt keyisr(void);
 void (__interrupt *oldisr)(void);
 
-word *clock=(word*)0x0000046C;
+word *clock=(word*)0x046C;
 
 
 struct coords {
@@ -40,6 +40,8 @@ int main(void)
 
 	while(lastkey != K_ESC) {
 		memset(VGA, 0, 64000);
+
+		pixel(player.x, player.y, CYAN);
 		
 		switch(lastkey) {
 			case K_W: --player.y; break;

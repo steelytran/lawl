@@ -5,7 +5,7 @@
 #include "draw.h"
 #include "defs.h"
 
-byte *VRAM = (byte*)0xA0000000L;
+byte *VRAM = (byte*)0xA0000;
 byte *VGA = NULL;
 
 float SIN[360];
@@ -28,9 +28,8 @@ void init_tables()
 void set_mode(byte mode)
 {
 	union REGS regs;
-	regs.h.ah = 0x00;
-	regs.h.al = mode;
-	int86(0x10, &regs, &regs);
+	regs.w.ax = mode;
+	int386(0x10, &regs, &regs);
 }
 
 void pixel(int x, int y, byte color)
