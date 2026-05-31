@@ -13,21 +13,10 @@ void (__interrupt *oldisr)(void);
 
 word *clock=(word*)0x046C;
 
-
-struct coords {
-	int x;
-	int y;
-};
-
-struct coordpair {
-	struct coords a;
-	struct coords b;
-};
-
 int main(void)
 {
 	int i;
-	struct coords player = {0, 0};
+	Mouse cursor = {159, 99};
 
 	VGA = (byte *)malloc(64000);
 	if (VGA==NULL)exit(1);
@@ -38,17 +27,14 @@ int main(void)
 	init_tables();
 	set_mode(0x13);
 
+	mouseinit();
+
 	while(lastkey != K_ESC) {
 		memset(VGA, 0, 64000);
 
-		pixel(player.x, player.y, CYAN);
-		
-		switch(lastkey) {
-			case K_W: --player.y; break;
-			case K_A: --player.x; break;
-			case K_S: ++player.y; break;
-			case K_D: ++player.x; break;
-		}
+		mousemov(&cursor);
+
+		mpointer(&cursor, pointer);
 
                 while ((inp(0x3DA) & 0x08));
                 while (!(inp(0x3DA) & 0x08));

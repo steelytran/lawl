@@ -18,18 +18,33 @@ int keychar()
 	int386(0x16, &regs, &regs);
 	return regs.h.al;
 }
-
-void mousemov(int *x, int *y)
+void mouseinit()
 {
-	static int yaw=0;
+        __asm {
+                mov ax, 07h
+                mov cx, 0
+                mov dx, 319
+                int 33h
 
-	regs.w.ax = 0x0B;
-	int386(0x33, &regs, &regs);
+                mov ax, 08h
+                mov cx, 0
+                mov dx, 199
+                int 33h
 
-	yaw+=(short)regs.w.cx;
-
-	yaw %= 360;
-	if (yaw<0){yaw+=360;}
-
-	*x = yaw;
+                mov ax, 0Fh
+                mov cx, 10h
+                mov dx, 20h
+                int 33h
+        }
 }
+
+void mousemov(Mouse *p)
+{
+        regs.w.ax = 0x03;
+        int386(0x33, &regs, &regs);
+
+        p->x = regs.w.cx;
+        p->y = regs.w.dx;
+        p->bx = regs.w.bx;
+}
+

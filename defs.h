@@ -87,8 +87,17 @@ extern void interrupt keyisr(void);
 #define K_DOWN 0x50
 #define K_RIGHT 0x4D
 
-/*int scancode();
-int keybuffer();
-void mousemov(int *x, int *y);*/
+typedef struct {
+        int x;
+        int y;
+        byte bx;
+} Mouse;
+
+void mouseinit();
+void mousemov(Mouse *p);
+
+extern int pointer[];
+
+void mpointer(Mouse *m, int* cursor);
 
 #endif
