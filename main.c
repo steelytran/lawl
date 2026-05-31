@@ -2,23 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <stdint.h>
 
 #include "draw.h"
 #include "defs.h"
 #include "colors.h"
 
-extern volatile byte lastkey;
+extern volatile uint8_t lastkey;
 extern void __interrupt keyisr(void);
 void (__interrupt *oldisr)(void);
 
-word *clock=(word*)0x046C;
+uint16_t *clock=(uint16_t*)0x046C;
 
 int main(void)
 {
 	int i;
-	Mouse cursor = {159, 99};
+	Mouse minput = {159, 99};
 
-	VGA = (byte *)malloc(64000);
+	VGA = (uint8_t *)malloc(64000);
 	if (VGA==NULL)exit(1);
 
 	oldisr = _dos_getvect(0x09);
@@ -32,9 +33,8 @@ int main(void)
 	while(lastkey != K_ESC) {
 		memset(VGA, 0, 64000);
 
-		mousemov(&cursor);
-
-		mpointer(&cursor, pointer);
+		mousemov(&minput);
+		cursor(&minput, crosshair);
 
                 while ((inp(0x3DA) & 0x08));
                 while (!(inp(0x3DA) & 0x08));

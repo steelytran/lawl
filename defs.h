@@ -1,9 +1,9 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include <stdint.h>
+
 #define sgn(x) (x<0?-1:(x>0?1:0))
-typedef unsigned char byte;
-typedef unsigned short word;
 
 #define PI 3.14159f
 
@@ -11,7 +11,7 @@ extern float SIN[360];
 extern float COS[360];
 extern long SIN_ACOS[1024];
 
-extern volatile byte lastkey;
+extern volatile uint8_t lastkey;
 extern void interrupt keyisr(void);
 
 #define K_ESC 0x01
@@ -90,14 +90,20 @@ extern void interrupt keyisr(void);
 typedef struct {
         int x;
         int y;
-        byte bx;
+        uint8_t bx;
 } Mouse;
+
+typedef struct {
+        int x;
+        int y;
+} Coords;
 
 void mouseinit();
 void mousemov(Mouse *p);
 
-extern int pointer[];
+extern int cursor1[];
+extern int crosshair[];
 
-void mpointer(Mouse *m, int* cursor);
+void cursor(Mouse *m, int* cursor);
 
 #endif

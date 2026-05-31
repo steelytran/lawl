@@ -1,12 +1,13 @@
 #include <dos.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "draw.h"
 #include "defs.h"
 
-byte *VRAM = (byte*)0xA0000;
-byte *VGA = NULL;
+uint8_t *VRAM = (uint8_t*)0xA0000;
+uint8_t *VGA = NULL;
 
 float SIN[360];
 float COS[360];
@@ -25,21 +26,21 @@ void init_tables()
 	}
 }
 
-void set_mode(byte mode)
+void set_mode(uint8_t mode)
 {
 	union REGS regs;
 	regs.w.ax = mode;
 	int386(0x10, &regs, &regs);
 }
 
-void pixel(int x, int y, byte color)
+void pixel(int x, int y, uint8_t color)
 {
 	if(x>=0&&x<320&&y>=0&&y<200) {
 		VGA[(y<<8) + (y<<6) + x] = color;
 	}
 }
 
-void line(int x1, int y1, int x2, int y2, byte color)
+void line(int x1, int y1, int x2, int y2, uint8_t color)
 {
 	int i;
 	int dx = x2 - x1;
@@ -77,7 +78,7 @@ void line(int x1, int y1, int x2, int y2, byte color)
 	}
 }
 
-void polygon(int *vertices, int count, byte color)
+void polygon(int *vertices, int count, uint8_t color)
 {
 	int i;
 	int x1, y1, x2, y2;
@@ -95,7 +96,7 @@ void polygon(int *vertices, int count, byte color)
 	line(x1, y1, x2, y2, color);
 }
 
-void rect(int x1, int y1, int x2, int y2, byte color)
+void rect(int x1, int y1, int x2, int y2, uint8_t color)
 {
 	int i, j;
 	int dx = x1 - x2;
@@ -121,7 +122,7 @@ void rect(int x1, int y1, int x2, int y2, byte color)
 	}
 }
 
-void circle(int x, int y, int radius, byte color)
+void circle(int x, int y, int radius, uint8_t color)
 {
 	long n=0, invradius=(1/(float)radius)*0x10000L;
 	int dx=0, dy=radius-1;

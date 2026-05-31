@@ -1,10 +1,11 @@
 #include <dos.h>
 #include <conio.h>
+#include <stdint.h>
 
 #include "defs.h"
 
 union REGS regs;
-volatile byte lastkey = 0;
+volatile uint8_t lastkey = 0;
 
 void __interrupt keyisr()
 {
