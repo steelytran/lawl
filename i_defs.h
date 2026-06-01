@@ -96,8 +96,8 @@ typedef struct {
 } Mouse;
 
 typedef struct {
-        int x;
-        int y;
+        float x;
+        float y;
 } Coords;
 
 typedef struct {
@@ -124,6 +124,7 @@ void cursor(Mouse *m, int* cursor);
 void playerinput(Coords *player, const Mouse *mouse);
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
+void rotate(int *ptr_x, int *ptr_y, Coords *p, Mouse *m);
 
 void initstack(Stack *s);
 void push_render(Stack *s, Wall *w);

@@ -1,0 +1,8 @@
+map.c(75): Warning! E1179: Parameter 4, type qualifier mismatch
+map.c(75): Note! I2003: source conversion type is 'Mouse const *'
+map.c(75): Note! I2004: target conversion type is 'Mouse *'
+map.c(75): Note! I2002: 'rotate' defined in: map.c(51)
+map.c(76): Warning! E1179: Parameter 4, type qualifier mismatch
+map.c(76): Note! I2003: source conversion type is 'Mouse const *'
+map.c(76): Note! I2004: target conversion type is 'Mouse *'
+map.c(76): Note! I2002: 'rotate' defined in: map.c(51)

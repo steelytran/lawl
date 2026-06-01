@@ -32,12 +32,13 @@ int main(void)
 	set_mode(0x13);
 
 	mouseinit();
-	mousemov(&minput);
 
 	initstack(&map);
 
 	while(!keystate[K_ESC]) {
 		memset(VGA, 0, 64000);
+
+		mousemov(&minput);
 
 		pixel(159, 99, LIGHTGREEN);
 
@@ -53,6 +54,8 @@ int main(void)
 	free(VGA);
 	set_mode(0x03);
 	_dos_setvect(0x09, oldisr);
+
+	printf("%d\n", minput.x);
 
 	return 0;
 }

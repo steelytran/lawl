@@ -26,22 +26,23 @@ int keychar()
 }
 void mouseinit()
 {
-        __asm {
-                mov ax, 07h
-                mov cx, 0
-                mov dx, 319
-                int 33h
+	regs.w.ax = 0x00;
+	int386(0x33, &regs, &regs);
 
-                mov ax, 08h
-                mov cx, 0
-                mov dx, 199
-                int 33h
+        regs.w.ax = 0x07;
+        regs.w.cx = 0;
+        regs.w.dx = 361;
+        int386(0x33, &regs, &regs);
 
-                mov ax, 0Fh
-                mov cx, 10h
-                mov dx, 20h
-                int 33h
-        }
+        regs.w.ax = 0x08;
+        regs.w.cx = 0;
+        regs.w.dx = 0;
+        int386(0x33, &regs, &regs);
+
+        /*regs.w.ax = 0x0F;
+        regs.w.cx = 0x10;
+        regs.w.dx = 0x20;
+        int386(0x33, &regs, &regs);*/
 }
 
 void mousemov(Mouse *p)
