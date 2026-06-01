@@ -21,6 +21,7 @@ int main(void)
 
 	Coords player = {0, 0};
 	Mouse minput;
+	minput.angle = 0;
 
 	VGA = (uint8_t *)malloc(64000);
 	if (VGA==NULL)exit(1);
@@ -31,8 +32,6 @@ int main(void)
 	init_tables();
 	set_mode(0x13);
 
-	mouseinit();
-
 	initstack(&map);
 
 	while(!keystate[K_ESC]) {
@@ -42,7 +41,7 @@ int main(void)
 
 		pixel(159, 99, LIGHTGREEN);
 
-		playerinput(&player, &minput);
+		playerinput(&player, minput.angle);
 		push_render(&map, &walls);
 		maprender(&map, &player, &minput);
 
@@ -54,8 +53,6 @@ int main(void)
 	free(VGA);
 	set_mode(0x03);
 	_dos_setvect(0x09, oldisr);
-
-	printf("%d\n", minput.x);
 
 	return 0;
 }

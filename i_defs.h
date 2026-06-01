@@ -14,6 +14,11 @@ extern long SIN_ACOS[1024];
 extern volatile uint8_t keystate[128];
 extern void interrupt keyisr(void);
 
+#define WIDTH 319
+#define HEIGHT 199
+#define X_CENTER 159
+#define Y_CENTER 99
+
 #define MAXLINE 256
 
 #define K_ESC 0x01
@@ -93,6 +98,7 @@ typedef struct {
         int x;
         int y;
         uint8_t bx;
+	int angle;
 } Mouse;
 
 typedef struct {
@@ -121,14 +127,13 @@ extern int cursor1[];
 extern int crosshair[];
 
 void cursor(Mouse *m, int* cursor);
-void playerinput(Coords *player, const Mouse *mouse);
+void playerinput(Coords *player, int angle);
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
-void rotate(int *ptr_x, int *ptr_y, Coords *p, Mouse *m);
+void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
 
 void initstack(Stack *s);
 void push_render(Stack *s, Wall *w);
 void maprender(Stack *s, const Coords *player, const Mouse *mouse);
-void playerinput(Coords *player, const Mouse *mouse);
 
 #endif

@@ -24,34 +24,18 @@ int keychar()
 	int386(0x16, &regs, &regs);
 	return regs.h.al;
 }
-void mouseinit()
-{
-	regs.w.ax = 0x00;
-	int386(0x33, &regs, &regs);
-
-        regs.w.ax = 0x07;
-        regs.w.cx = 0;
-        regs.w.dx = 361;
-        int386(0x33, &regs, &regs);
-
-        regs.w.ax = 0x08;
-        regs.w.cx = 0;
-        regs.w.dx = 0;
-        int386(0x33, &regs, &regs);
-
-        /*regs.w.ax = 0x0F;
-        regs.w.cx = 0x10;
-        regs.w.dx = 0x20;
-        int386(0x33, &regs, &regs);*/
-}
 
 void mousemov(Mouse *p)
 {
-        regs.w.ax = 0x03;
+        regs.w.ax = 0x0b;
         int386(0x33, &regs, &regs);
 
-        p->x = regs.w.cx;
-        p->y = regs.w.dx;
+	p->x = (signed short)regs.w.cx;
+        p->y = (signed short)regs.w.dx;
         p->bx = regs.w.bx;
+
+	p->angle += p->x;
+	p->angle%=360;
+	if(p->angle<1){p->angle += 359;}
 }
 

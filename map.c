@@ -27,36 +27,38 @@ void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 	}
 }
 
-void playerinput(Coords *player, const Mouse *mouse)
+void playerinput(Coords *player, int angle)
 {
 	if(keystate[K_W]) {
-	        player->x-=(SIN[mouse->x]);
-	        player->y-=(COS[mouse->x]);
+	        player->x-=(SIN[angle]);
+	        player->y-=(COS[angle]);
 	}
 	if(keystate[K_A]) {
-                player->x-=(COS[mouse->x]);
-                player->y+=(SIN[mouse->x]);
+                player->x-=(COS[angle]);
+                player->y+=(SIN[angle]);
 	}
 	if(keystate[K_S]) {
-                player->x+=(SIN[mouse->x]);
-                player->y+=(COS[mouse->x]);
+                player->x+=(SIN[angle]);
+                player->y+=(COS[angle]);
 	}
 	if(keystate[K_D]) {
-                player->x+=(COS[mouse->x]);
-                player->y-=(SIN[mouse->x]);
+                player->x+=(COS[angle]);
+                player->y-=(SIN[angle]);
 	}
 
 }
 
-void rotate(int *ptr_x, int *ptr_y, Coords *p, Mouse *m)
+void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 {
-	int angle = m->x;
-
 	int x = *ptr_x;
 	int y = *ptr_y;
 
-	*ptr_x = p->x + (int)((x * COS[angle]) - (y * SIN[angle]));
-	*ptr_y = p->y + (int)((x * SIN[angle]) + (y * COS[angle]));
+	int rotated_x = (int)((x * COS[angle]) - (y * SIN[angle]));
+	int rotated_y = (int)((x * SIN[angle]) + (y * COS[angle]));
+
+	*ptr_x = rotated_x;
+	*ptr_y = rotated_y;
+
 }
 
 
@@ -67,13 +69,18 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	int x2 = wall->x2;
 	int y2 = wall->y2;
 
-	Coords player_rel;
-	
-	player_rel.x = 159 - player->x;
-	player_rel.y = 99 - player->y;
+	x1 -= player->x;
+	y1 -= player->y;
+	x2 -= player->x;
+	y2 -= player->y;
 
-	rotate(&x1, &y1, &player_rel, mouse);
-	rotate(&x2, &y2, &player_rel, mouse);
+	rotate(&x1, &y1, player, mouse->angle);
+	rotate(&x2, &y2, player, mouse->angle);
+
+	x1 += X_CENTER;
+	y1 += Y_CENTER;
+	x2 += X_CENTER;
+	y2 += Y_CENTER;
 	
 	line(x1, y1, x2, y2, wall->color);
 }
