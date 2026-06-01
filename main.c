@@ -39,8 +39,6 @@ int main(void)
 
 		mousemov(&minput);
 
-		pixel(159, 99, LIGHTGREEN);
-
 		playerinput(&player, minput.angle);
 		push_render(&map, &walls);
 		maprender(&map, &player, &minput);

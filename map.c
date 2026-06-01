@@ -58,9 +58,7 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 
 	*ptr_x = rotated_x;
 	*ptr_y = rotated_y;
-
 }
-
 
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 {
@@ -68,6 +66,9 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	int y1 = wall->y1;
 	int x2 = wall->x2;
 	int y2 = wall->y2;
+	int renderw[8];
+
+	int p_x1, p_x2, p_y1, p_y2;
 
 	x1 -= player->x;
 	y1 -= player->y;
@@ -77,10 +78,26 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	rotate(&x1, &y1, player, mouse->angle);
 	rotate(&x2, &y2, player, mouse->angle);
 
-	x1 += X_CENTER;
-	y1 += Y_CENTER;
-	x2 += X_CENTER;
-	y2 += Y_CENTER;
-	
-	line(x1, y1, x2, y2, wall->color);
+	/*VIEW*/
+	if(y1<0&&y2<0&&x1!=0&&x2!=0) {
+
+		p_x1 = (-x1 << 6) / y1;
+		p_x2 = (-x2 << 6) / y2;
+		p_y1 = Y_CENTER;
+		p_y2 = Y_CENTER;
+
+		p_x1 += X_CENTER;
+		p_x2 += X_CENTER;
+
+		renderw[0] = p_x1;
+		renderw[1] = p_y1 + (p_y1<<5)/y1;
+		renderw[2] = p_x2;
+		renderw[3] = p_y2 + (p_y2<<5)/y2;
+		renderw[4] = p_x2;
+		renderw[5] = p_y2 - (p_y2<<5)/y2;
+		renderw[6] = p_x1;
+		renderw[7] = p_y1 - (p_y1<<5)/y1;
+
+		polygon(renderw, 4, RED);
+	}
 }

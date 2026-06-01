@@ -34,8 +34,9 @@ void mousemov(Mouse *p)
         p->y = (signed short)regs.w.dx;
         p->bx = regs.w.bx;
 
-	p->angle += p->x;
+	p->angle+= 360 - p->x;
 	p->angle%=360;
+	
 	if(p->angle<1){p->angle += 359;}
 }
 
