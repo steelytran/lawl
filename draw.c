@@ -4,7 +4,8 @@
 #include <stdint.h>
 
 #include "draw.h"
-#include "defs.h"
+#include "g_defs.h"
+#include "i_defs.h"
 
 uint8_t *VRAM = (uint8_t*)0xA0000;
 uint8_t *VGA = NULL;

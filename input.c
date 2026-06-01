@@ -2,14 +2,19 @@
 #include <conio.h>
 #include <stdint.h>
 
-#include "defs.h"
+#include "i_defs.h"
 
 union REGS regs;
-volatile uint8_t lastkey = 0;
+volatile uint8_t keystate[128];
 
 void __interrupt keyisr()
 {
-	lastkey = inp(0x60);
+	int key = inp(0x60);
+	
+	if(key&0x80) {
+		keystate[key&0x7f] = 0;
+	} else {keystate[key] = 1;}
+
 	outp(0x20, 0x20);
 }
 

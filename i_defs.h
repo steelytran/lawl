@@ -11,8 +11,10 @@ extern float SIN[360];
 extern float COS[360];
 extern long SIN_ACOS[1024];
 
-extern volatile uint8_t lastkey;
+extern volatile uint8_t keystate[128];
 extern void interrupt keyisr(void);
+
+#define MAXLINE 256
 
 #define K_ESC 0x01
 #define K_F1 0x3B
@@ -98,6 +100,20 @@ typedef struct {
         int y;
 } Coords;
 
+typedef struct {
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+	uint8_t color;
+	int render;
+} Wall;
+
+typedef struct {
+	Wall* arr[MAXLINE];
+	int top;
+} Stack;
+
 void mouseinit();
 void mousemov(Mouse *p);
 
@@ -106,6 +122,12 @@ extern int crosshair[];
 
 void cursor(Mouse *m, int* cursor);
 void playerinput(Coords *player, const Mouse *mouse);
-void mapshift(int *wall, const Coords *player, const Mouse *mouse);
+void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
+
+void initstack(Stack *s);
+void push_render(Stack *s, Wall *w);
+void maprender(Stack *s, const Coords *player, const Mouse *mouse);
+void playerinput(Coords *player, const Mouse *mouse);
+
 #endif
