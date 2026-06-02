@@ -55,6 +55,8 @@ void line(int x1, int y1, int x2, int y2, uint8_t color)
 	int x = x1;
 	int y = y1;
 	
+	pixel(x, y, color);
+
 	if(u_dx >= u_dy) {
 		for(i = 0; i < u_dx; i++) {
 			py+=u_dy;

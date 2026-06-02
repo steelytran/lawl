@@ -17,7 +17,9 @@ int main(void)
 {
 	int i;
 	Stack map;
-	Wall walls = {50, 50, 25, 75, RED, 1};
+	Wall wall0 = {50, 50, 25, 75, RED, 1};
+	Wall wall1 = {50, 50, -25, -75, MAGENTA, 1};
+	Wall wall2 = {25, 75, 30, 43, GREEN, 1};
 
 	Coords player = {0, 0};
 	Mouse minput;
@@ -38,9 +40,12 @@ int main(void)
 		memset(VGA, 0, 64000);
 
 		mousemov(&minput);
-
 		playerinput(&player, minput.angle);
-		push_render(&map, &walls);
+
+		push_render(&map, &wall0);
+		push_render(&map, &wall1);
+		push_render(&map, &wall2);
+
 		maprender(&map, &player, &minput);
 
                 while ((inp(0x3DA) & 0x08));

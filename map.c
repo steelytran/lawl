@@ -21,9 +21,12 @@ void push_render(Stack *s, Wall *w)
 void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 {
 	int i;
-	Wall *seg = s->arr[s->top];
-	if(seg->render) {
-		mapshift(seg, player, mouse);
+
+	for(i=0; i<=s->top; i++) {
+		Wall *seg = s->arr[i];
+		if(seg->render) {
+			mapshift(seg, player, mouse);
+		}
 	}
 }
 
@@ -79,10 +82,10 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	rotate(&x2, &y2, player, mouse->angle);
 
 	/*VIEW*/
-	if(y1<0&&y2<0&&x1!=0&&x2!=0) {
+	if(y1<0&&y2<0) {
 
-		p_x1 = (-x1 << 6) / y1;
-		p_x2 = (-x2 << 6) / y2;
+		p_x1 = (-x1 << 7) / y1;
+		p_x2 = (-x2 << 7) / y2;
 		p_y1 = Y_CENTER;
 		p_y2 = Y_CENTER;
 
