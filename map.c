@@ -24,9 +24,7 @@ void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 
 	for(i=0; i<=s->top; i++) {
 		Wall *seg = s->arr[i];
-		if(seg->render) {
-			mapshift(seg, player, mouse);
-		}
+		mapshift(seg, player, mouse);
 	}
 }
 
@@ -53,11 +51,11 @@ void playerinput(Coords *player, int angle)
 
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 {
-	int x = *ptr_x;
-	int y = *ptr_y;
+	int radius_x = *ptr_x - p->x;
+	int radius_y = *ptr_y - p->y;
 
-	int rotated_x = (int)((x * COS[angle]) - (y * SIN[angle]));
-	int rotated_y = (int)((x * SIN[angle]) + (y * COS[angle]));
+	int rotated_x = (int)((radius_x * COS[angle]) - (radius_y * SIN[angle]));
+	int rotated_y = (int)((radius_x * SIN[angle]) + (radius_y * COS[angle]));
 
 	*ptr_x = rotated_x;
 	*ptr_y = rotated_y;
@@ -65,42 +63,62 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 {
+	int i;
+
 	int x1 = wall->x1;
 	int y1 = wall->y1;
 	int x2 = wall->x2;
 	int y2 = wall->y2;
-	int renderw[8];
+	int r_w[8];
 
-	int p_x1, p_x2, p_y1, p_y2;
+	int z;
 
-	x1 -= player->x;
-	y1 -= player->y;
-	x2 -= player->x;
-	y2 -= player->y;
+	int sx1, sx2, sy1, sy2;
+
+	const int NEARPLANE = -10;
 
 	rotate(&x1, &y1, player, mouse->angle);
 	rotate(&x2, &y2, player, mouse->angle);
 
-	/*VIEW*/
-	if(y1<0&&y2<0) {
+	/*RELATIVE VIEW*/
 
-		p_x1 = (-x1 << 7) / y1;
-		p_x2 = (-x2 << 7) / y2;
-		p_y1 = Y_CENTER;
-		p_y2 = Y_CENTER;
+	if(y1>=NEARPLANE&&y2>=NEARPLANE) {return;}
+	else {
 
-		p_x1 += X_CENTER;
-		p_x2 += X_CENTER;
+		if(y1>=NEARPLANE) {
+			x1 += (int)(NEARPLANE-y1)*(x2-x1)/(y2-y1);
+			y1 = NEARPLANE;
+		}
+		else if(y2>=NEARPLANE) {
+			x2 += (int)(NEARPLANE-y2)*(x1-x2)/(y1-y2);
+			y2 = NEARPLANE;
+		}
 
-		renderw[0] = p_x1;
-		renderw[1] = p_y1 + (p_y1<<5)/y1;
-		renderw[2] = p_x2;
-		renderw[3] = p_y2 + (p_y2<<5)/y2;
-		renderw[4] = p_x2;
-		renderw[5] = p_y2 - (p_y2<<5)/y2;
-		renderw[6] = p_x1;
-		renderw[7] = p_y1 - (p_y1<<5)/y1;
+		sx1 = (-x1<<6) / y1;
+		sx2 = (-x2<<6) / y2;
+		sy1 = Y_CENTER;
+		sy2 = Y_CENTER;
 
-		polygon(renderw, 4, RED);
+		sx1 += X_CENTER;
+		sx2 += X_CENTER;
+
+		z = 0;
+
+		r_w[0] = sx1;
+		r_w[1] = sy1 + z + (sy1<<5)/y1;
+		r_w[2] = sx2;
+		r_w[3] = sy2 + z + (sy2<<5)/y2;
+		r_w[4] = sx2;
+		r_w[5] = sy2 + z - (sy2<<5)/y2;
+		r_w[6] = sx1;
+		r_w[7] = sy1 + z - (sy1<<5)/y1;
+
+		line(r_w[0], r_w[1], r_w[2], r_w[3], wall->color);
+		line(r_w[4], r_w[5], r_w[6], r_w[7], wall->color);
+
+		if(y1<NEARPLANE)
+			line(r_w[6], r_w[7], r_w[0], r_w[1], wall->color);
+		if(y2<NEARPLANE)
+			line(r_w[2], r_w[3], r_w[4], r_w[5], wall->color);
 	}
 }

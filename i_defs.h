@@ -12,7 +12,10 @@ extern float COS[360];
 extern long SIN_ACOS[1024];
 
 extern volatile uint8_t keystate[128];
-extern void interrupt keyisr(void);
+void interrupt keyisr(void);
+
+void interrupt tick(void);
+void tickrate(int div);
 
 #define WIDTH 319
 #define HEIGHT 199
