@@ -1,4 +1,5 @@
 #include <dos.h>
+#include <stdlib.h>
 
 #include "i_defs.h"
 #include "g_defs.h"
@@ -18,6 +19,12 @@ void push_render(Stack *s, Wall *w)
 	}
 }
 
+void pop_render(Stack *s, int index)
+{
+	s->arr[index] = s->arr[s->top];
+	s->top--;
+}
+
 void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 {
 	int i;
@@ -30,23 +37,33 @@ void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 
 void playerinput(Coords *player, int angle)
 {
-	if(keystate[K_W]) {
-	        player->x-=(SIN[angle]);
-	        player->y-=(COS[angle]);
-	}
-	if(keystate[K_A]) {
-                player->x-=(COS[angle]);
-                player->y+=(SIN[angle]);
-	}
-	if(keystate[K_S]) {
-                player->x+=(SIN[angle]);
-                player->y+=(COS[angle]);
-	}
-	if(keystate[K_D]) {
-                player->x+=(COS[angle]);
-                player->y-=(SIN[angle]);
-	}
+	int ds = t1?(t1<<1):(t1+1);
 
+        int f_x=ds*-(SIN[angle]);
+        int f_y=ds*-(COS[angle]);
+
+        int l_x=ds*-(COS[angle]);
+        int l_y=ds*(SIN[angle]);
+
+        int b_x=ds*(SIN[angle]);
+        int b_y=ds*(COS[angle]);
+
+        int r_x=ds*(COS[angle]);
+        int r_y=ds*-(SIN[angle]);
+
+	if(keystate[K_W]) {
+	        player->x+=f_x;
+	        player->y+=f_y;
+	} if(keystate[K_A]) {
+                player->x+=l_x;
+                player->y+=l_y;
+	} if(keystate[K_S]) {
+                player->x+=b_x;
+                player->y+=b_y;
+	} if(keystate[K_D]) {
+                player->x+=r_x;
+                player->y+=r_y;
+	}
 }
 
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
@@ -54,11 +71,8 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 	int radius_x = *ptr_x - p->x;
 	int radius_y = *ptr_y - p->y;
 
-	int rotated_x = (int)((radius_x * COS[angle]) - (radius_y * SIN[angle]));
-	int rotated_y = (int)((radius_x * SIN[angle]) + (radius_y * COS[angle]));
-
-	*ptr_x = rotated_x;
-	*ptr_y = rotated_y;
+	*ptr_x = (int)((radius_x * COS[angle]) - (radius_y * SIN[angle]));
+	*ptr_y = (int)((radius_x * SIN[angle]) + (radius_y * COS[angle]));
 }
 
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
@@ -70,8 +84,6 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	int x2 = wall->x2;
 	int y2 = wall->y2;
 	int r_w[8];
-
-	int z;
 
 	int sx1, sx2, sy1, sy2;
 
@@ -94,24 +106,22 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 			y2 = NEARPLANE;
 		}
 
-		sx1 = (-x1<<6) / y1;
-		sx2 = (-x2<<6) / y2;
+		sx1 = (-x1<<7) / y1;
+		sx2 = (-x2<<7) / y2;
 		sy1 = Y_CENTER;
 		sy2 = Y_CENTER;
 
 		sx1 += X_CENTER;
 		sx2 += X_CENTER;
 
-		z = 0;
-
 		r_w[0] = sx1;
-		r_w[1] = sy1 + z + (sy1<<5)/y1;
+		r_w[1] = sy1 + (sy1<<6)/y1;
 		r_w[2] = sx2;
-		r_w[3] = sy2 + z + (sy2<<5)/y2;
+		r_w[3] = sy2 + (sy2<<6)/y2;
 		r_w[4] = sx2;
-		r_w[5] = sy2 + z - (sy2<<5)/y2;
+		r_w[5] = sy2 - (sy2<<6)/y2;
 		r_w[6] = sx1;
-		r_w[7] = sy1 + z - (sy1<<5)/y1;
+		r_w[7] = sy1 - (sy1<<6)/y1;
 
 		line(r_w[0], r_w[1], r_w[2], r_w[3], wall->color);
 		line(r_w[4], r_w[5], r_w[6], r_w[7], wall->color);

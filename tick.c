@@ -2,9 +2,11 @@
 #include <conio.h>
 #include <stdint.h>
 
+volatile uint8_t tickcount;
+
 void __interrupt tick()
 {
-
+	++tickcount;
 	outp(0x20, 0x20);
 }
 

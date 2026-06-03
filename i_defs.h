@@ -14,6 +14,8 @@ extern long SIN_ACOS[1024];
 extern volatile uint8_t keystate[128];
 void interrupt keyisr(void);
 
+extern volatile uint8_t tickcount;
+extern uint8_t t1;
 void interrupt tick(void);
 void tickrate(int div);
 
@@ -107,6 +109,7 @@ typedef struct {
 typedef struct {
         float x;
         float y;
+        int speed;
 } Coords;
 
 typedef struct {
