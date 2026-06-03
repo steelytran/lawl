@@ -64,6 +64,7 @@ void tickrate(int div);
 #define K_P 0x19
 #define K_LBRACKET 0x1A
 #define K_RBRACKET 0x1B
+#define K_LSHIFT 0x2A
 #define K_BACKSLASH 0x2B
 #define K_A 0x1E
 #define K_S 0x1F
@@ -87,6 +88,7 @@ void tickrate(int div);
 #define K_COMMA 0x33
 #define K_PERIOD 0x34
 #define K_SLASH 0x35
+#define K_RSHIFT 0x36
 #define K_SPACE 0x39
 #define K_INS 0x52	/* Sets / clears 'Insert' modifier */
 #define K_HOME 0x47
@@ -109,7 +111,7 @@ typedef struct {
 typedef struct {
         float x;
         float y;
-        int speed;
+        int z;
 } Coords;
 
 typedef struct {
@@ -117,6 +119,7 @@ typedef struct {
 	int y1;
 	int x2;
 	int y2;
+	int z;
 	uint8_t color;
 	int render;
 } Wall;

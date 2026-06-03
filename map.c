@@ -68,6 +68,11 @@ void playerinput(Coords *player, int angle)
                 player->x += r_x;
                 player->y += r_y;
 	}
+	/* if(keystate[K_SPACE]) {
+                player->z += 1;
+	} if(keystate[K_LSHIFT]) {
+                player->z -= 1;
+	}*/
 }
 
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
@@ -90,6 +95,10 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	int r_w[8];
 
 	int sx1, sx2, sy1, sy2;
+
+	int color; /*testing*/
+
+	/*int z = player->z;*/
 
 	const int NEARPLANE = -10;
 
@@ -119,20 +128,22 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 		sx2 += X_CENTER;
 
 		r_w[0] = sx1;
-		r_w[1] = sy1 + (sy1<<6)/y1;
+		r_w[1] = sy1 + (sy1<<7)/y1;
 		r_w[2] = sx2;
-		r_w[3] = sy2 + (sy2<<6)/y2;
+		r_w[3] = sy2 + (sy2<<7)/y2;
 		r_w[4] = sx2;
-		r_w[5] = sy2 - (sy2<<6)/y2;
+		r_w[5] = sy2 - (sy2<<7)/y2;
 		r_w[6] = sx1;
-		r_w[7] = sy1 - (sy1<<6)/y1;
+		r_w[7] = sy1 - (sy1<<7)/y1;
 
-		line(r_w[0], r_w[1], r_w[2], r_w[3], wall->color);
-		line(r_w[4], r_w[5], r_w[6], r_w[7], wall->color);
+		color = (sx1>sx2)?RED:BLUE;
+
+		line(r_w[0], r_w[1], r_w[2], r_w[3], color);
+		line(r_w[4], r_w[5], r_w[6], r_w[7], color);
 
 		if(y1<NEARPLANE)
-			line(r_w[6], r_w[7], r_w[0], r_w[1], wall->color);
+			line(r_w[6], r_w[7], r_w[0], r_w[1], color);
 		if(y2<NEARPLANE)
-			line(r_w[2], r_w[3], r_w[4], r_w[5], wall->color);
+			line(r_w[2], r_w[3], r_w[4], r_w[5], color);
 	}
 }
