@@ -53,11 +53,9 @@ int main(void)
 	push_render(&map, &wall3);
 
 	while(!keystate[K_ESC]) {
-
 		tickcount = 0;
 
 		memset(VGA, 0, 64000);
-		memset(VGA, LIGHTBLUE, 32000);
 
 		mousemov(&minput);
 		playerinput(&player, minput.angle);

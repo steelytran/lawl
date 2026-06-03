@@ -37,7 +37,11 @@ void maprender(Stack *s, const Coords *player, const Mouse *mouse)
 
 void playerinput(Coords *player, int angle)
 {
-	int ds = t1?(t1<<1):(t1+1);
+	int xmov = (keystate[K_A]^keystate[K_D]);
+	int ymov = (keystate[K_W]^keystate[K_S]);
+	int xyspeed = xmov + ymov - 1;
+	int mul = 2>>xyspeed;
+	int ds = t1+mul;
 
         int f_x=ds*-(SIN[angle]);
         int f_y=ds*-(COS[angle]);
@@ -52,17 +56,17 @@ void playerinput(Coords *player, int angle)
         int r_y=ds*-(SIN[angle]);
 
 	if(keystate[K_W]) {
-	        player->x+=f_x;
-	        player->y+=f_y;
+	        player->x += f_x;
+	        player->y += f_y;
 	} if(keystate[K_A]) {
-                player->x+=l_x;
-                player->y+=l_y;
+                player->x += l_x;
+                player->y += l_y;
 	} if(keystate[K_S]) {
-                player->x+=b_x;
-                player->y+=b_y;
+                player->x += b_x;
+                player->y += b_y;
 	} if(keystate[K_D]) {
-                player->x+=r_x;
-                player->y+=r_y;
+                player->x += r_x;
+                player->y += r_y;
 	}
 }
 
