@@ -1,4 +1,3 @@
-WATCOM=../../../open-watcom-v2/rel
 CC = wcc386
 LINKER = wlink
 
