@@ -98,7 +98,6 @@ typedef struct {
 typedef struct {
         float x;
         float y;
-        int z;
 } Coords;
 
 typedef struct {
@@ -106,29 +105,21 @@ typedef struct {
 	int y1;
 	int x2;
 	int y2;
-	uint8_t color;
 } Wall;
-
-typedef struct {
-	Wall* arr[MAXLINE];
-	int top;
-} Stack;
-
 
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
 
-void initstack(Stack *s);
-void push_render(Stack *s, Wall *w);
-void maprender(Stack *s, const Coords *player, const Mouse *mouse);
 void interrupt keyisr(void);
 void interrupt tick(void);
 void tickrate(int div);
 void mouseinit();
-void mousemov(Mouse *p);
-void playerinput(Coords *player, int angle);
+void mouseinput(Mouse *p);
+void keyinput(Coords *player, int angle);
 
+int editmap(char* name, Wall *tree, int size);
+int openmap(char* name, Wall *tree, int size);
 
 extern float SIN[360];
 extern float COS[360];

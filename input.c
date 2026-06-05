@@ -28,7 +28,7 @@ int keychar()
 	return regs.h.al;
 }
 
-void mousemov(Mouse *p)
+void mouseinput(Mouse *p)
 {
         regs.w.ax = 0x0b;
         int386(0x33, &regs, &regs);
@@ -43,7 +43,7 @@ void mousemov(Mouse *p)
 	if(p->angle<1){p->angle += 359;}
 }
 
-void playerinput(Coords *player, int angle)
+void keyinput(Coords *player, int angle)
 {
 	int xmov = (keystate[K_A]^keystate[K_D]);
 	int ymov = (keystate[K_W]^keystate[K_S]);

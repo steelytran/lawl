@@ -8,7 +8,8 @@
 #include "i_defs.h"
 #include "colors.h"
 
-void gamemode(int mode);
+#define GAMEMODE 1
+#define EDITMODE 0
 
 void __interrupt keyisr(void);
 void (__interrupt *oldisr09h)(void);
@@ -21,55 +22,54 @@ uint8_t t1;
 int main(int argc, char* argv[])
 {
 	int i;
-
-	Wall wall1 = {50, 50, -50, 50, GREEN};
-	Wall wall2 = {-50, 50, -50, -50, GREEN};
-	Wall wall3 = {-50, -50, 50, -50, GREEN};
-	Wall wall4 = {50, -50, 50, 50, GREEN};
-
-	Stack map;
+	Wall bsptree[4];
 
 	Coords player = {0, 0};
-	Mouse minput;
-	minput.angle = 0;
+	Mouse minput = {0, 0, 0, 0};
 
-	VGA = (uint8_t *)malloc(64000);
-	if (VGA==NULL)exit(1);
+	if(argc == 2) {
+		if(openmap(argv[1], &bsptree, 4)) {
+			printf("Could not find map \'%s\'\n", argv[1]);
+			return 1;
+		}
+	} else if(argc == 3 && !strcmp(argv[1],"-e")) {
+		if(editmap(argv[2], &bsptree, 4)) {
+			printf("Could not edit map \'%s\'\n", argv[2]);
+			return 1;
+		}
+	} else {printf("Invalid option."); return 1;}
 
 	oldisr09h = _dos_getvect(0x09);
 	oldisr08h = _dos_getvect(0x08);
-
 	_dos_setvect(0x08, tick);
 	_dos_setvect(0x09, keyisr);
 
 	tickrate(18644); /*64hz*/
 	
-	init_tables();
-	set_mode(0x13);
-
-	initstack(&map);
-	
-	push_render(&map, &wall1);
-	push_render(&map, &wall2);
-	push_render(&map, &wall3);
-	push_render(&map, &wall4);
-
-/*
-	if(argc>1&&!strcmp(argv[1],"-e")) {
+	VGA = (uint8_t *)malloc(64000);
+	if(VGA==NULL) {
+		printf("Could not allocate video memory.\n");
+		exit(1);
 	}
-*/
+
+	set_mode(0x13);
+	init_tables();
 
 	while(!keystate[K_ESC]) {
 		tickcount = 0;
 		memset(VGA, 0, 64000);
 
-		mousemov(&minput);
-		playerinput(&player, minput.angle);
-		maprender(&map, &player, &minput);
+		mouseinput(&minput);
+		keyinput(&player, minput.angle);
+
+		mapshift(&bsptree[0], &player, &minput);
+		mapshift(&bsptree[1], &player, &minput);
+		mapshift(&bsptree[2], &player, &minput);
+		mapshift(&bsptree[3], &player, &minput);
 
 		while ((inp(0x3DA) & 0x08));
 		while (!(inp(0x3DA) & 0x08));
-                memcpy(VRAM,VGA,64000);
+	        memcpy(VRAM,VGA,64000);
 		t1 = tickcount;
 	}
 

@@ -21,25 +21,24 @@ enum EGA {
 };
 
 enum GRAYSCALE {
-	GRAY_0 = 16,
-	GRAY_1,
-	GRAY_2,
-	GRAY_3,
-	GRAY_4,
-	GRAY_5,
-	GRAY_6,
-	GRAY_7,
-	GRAY_8,
-	GRAY_9,
-	GRAY_A,
-	GRAY_B,
-	GRAY_C,
-	GRAY_D,
-	GRAY_E,
-	GRAY_F
+	G0 = 16,
+	G1,
+	G2,
+	G3,
+	G4,
+	G5,
+	G6,
+	G7,
+	G8,
+	G9,
+	GA,
+	GB,
+	GC,
+	GD,
+	GE,
+	GF
 };
 
-/*
 enum HUE {
 	H16 = 224,
 	H17,
@@ -80,6 +79,5 @@ enum LIGHT {
 };
 
 int hsl(int hue, int sat, int light);
-*/
 
 #endif

@@ -5,35 +5,11 @@
 #include "colors.h"
 #include "draw.h"
 
+#define PARENT(x) = (x-1)>>1
+#define FRONT(x) = (x<<1)+1
+#define BACK(x) = (x<<1)+2
+
 extern volatile uint8_t keystate[];
-
-void initstack(Stack *s)
-{
-	s->top = -1;
-}
-
-void push_render(Stack *s, Wall *w)
-{
-	if(s->top < MAXLINE-1) {
-		s->arr[++(s->top)] = w;
-	}
-}
-
-void pop_render(Stack *s, int index)
-{
-	s->arr[index] = s->arr[s->top];
-	s->top--;
-}
-
-void maprender(Stack *s, const Coords *player, const Mouse *mouse)
-{
-	int i;
-
-	for(i=0; i<=s->top; i++) {
-		Wall *seg = s->arr[i];
-		mapshift(seg, player, mouse);
-	}
-}
 
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 {
@@ -57,8 +33,6 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 	int sx1, sx2, sy1, sy2;
 
 	int color; /*testing*/
-
-	/*int z = player->z;*/
 
 	const int NEARPLANE = -10;
 
