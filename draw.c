@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include "draw.h"
-#include "g_defs.h"
+#include "colors.h"
 #include "i_defs.h"
 
 uint8_t *VRAM = (uint8_t*)0xA0000;

@@ -1,7 +1,7 @@
 #include <dos.h>
 #include "i_defs.h"
 #include "draw.h"
-#include "g_defs.h"
+#include "colors.h"
 
 int cursor1[] = {
 0b00000001,

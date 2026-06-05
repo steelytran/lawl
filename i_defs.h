@@ -4,27 +4,12 @@
 #include <stdint.h>
 
 #define sgn(x) (x<0?-1:(x>0?1:0))
-
 #define PI 3.14159f
-
-extern float SIN[360];
-extern float COS[360];
-extern long SIN_ACOS[1024];
-
-extern volatile uint8_t keystate[128];
-void interrupt keyisr(void);
-
-extern volatile uint8_t tickcount;
-extern uint8_t t1;
-void interrupt tick(void);
-void tickrate(int div);
 
 #define WIDTH 319
 #define HEIGHT 199
 #define X_CENTER 159
 #define Y_CENTER 99
-
-#define MAXLINE 256
 
 #define K_ESC 0x01
 #define K_F1 0x3B
@@ -101,6 +86,8 @@ void tickrate(int div);
 #define K_DOWN 0x50
 #define K_RIGHT 0x4D
 
+#define MAXLINE 256
+
 typedef struct {
         int x;
         int y;
@@ -119,9 +106,7 @@ typedef struct {
 	int y1;
 	int x2;
 	int y2;
-	int z;
 	uint8_t color;
-	int render;
 } Wall;
 
 typedef struct {
@@ -129,14 +114,7 @@ typedef struct {
 	int top;
 } Stack;
 
-void mouseinit();
-void mousemov(Mouse *p);
 
-extern int cursor1[];
-extern int crosshair[];
-
-void cursor(Mouse *m, int* cursor);
-void playerinput(Coords *player, int angle);
 void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
@@ -144,5 +122,24 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
 void initstack(Stack *s);
 void push_render(Stack *s, Wall *w);
 void maprender(Stack *s, const Coords *player, const Mouse *mouse);
+void interrupt keyisr(void);
+void interrupt tick(void);
+void tickrate(int div);
+void mouseinit();
+void mousemov(Mouse *p);
+void playerinput(Coords *player, int angle);
+
+
+extern float SIN[360];
+extern float COS[360];
+extern long SIN_ACOS[1024];
+
+extern volatile uint8_t tickcount;
+extern uint8_t t1;
+
+extern volatile uint8_t keystate[128];
+
+extern int cursor1[];
+extern int crosshair[];
 
 #endif

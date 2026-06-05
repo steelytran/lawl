@@ -6,27 +6,29 @@
 
 #include "draw.h"
 #include "i_defs.h"
-#include "g_defs.h"
+#include "colors.h"
 
-extern void __interrupt keyisr(void);
+void gamemode(int mode);
+
+void __interrupt keyisr(void);
 void (__interrupt *oldisr09h)(void);
 void (__interrupt *oldisr08h)(void);
 
+void __interrupt tick(void);
 uint16_t *clock=(uint16_t*)0x046C;
-extern void __interrupt tick(void);
 uint8_t t1;
 
 int main(int argc, char* argv[])
 {
 	int i;
 
+	Wall wall1 = {50, 50, -50, 50, GREEN};
+	Wall wall2 = {-50, 50, -50, -50, GREEN};
+	Wall wall3 = {-50, -50, 50, -50, GREEN};
+	Wall wall4 = {50, -50, 50, 50, GREEN};
+
 	Stack map;
 
-	Wall wall0 = {200, 200, 100, 200, 0, RED, 1};
-	Wall wall1 = {100, 200, 100, 100, 0, GREEN, 1};
-	Wall wall2 = {100, 100, 200, 100, 0, BLUE, 1};
-	Wall wall3 = {200, 100, 200, 200, 0, WHITE, 1};
-	
 	Coords player = {0, 0};
 	Mouse minput;
 	minput.angle = 0;
@@ -46,11 +48,16 @@ int main(int argc, char* argv[])
 	set_mode(0x13);
 
 	initstack(&map);
-
-	push_render(&map, &wall0);
+	
 	push_render(&map, &wall1);
 	push_render(&map, &wall2);
 	push_render(&map, &wall3);
+	push_render(&map, &wall4);
+
+/*
+	if(argc>1&&!strcmp(argv[1],"-e")) {
+	}
+*/
 
 	while(!keystate[K_ESC]) {
 		tickcount = 0;
@@ -70,8 +77,6 @@ int main(int argc, char* argv[])
 	set_mode(0x03);
 	_dos_setvect(0x09, oldisr09h);
 	_dos_setvect(0x08, oldisr08h);
-
-	if(argc) {printf("%s\n", argv[1]);}
 
 	return 0;
 }

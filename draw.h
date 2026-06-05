@@ -1,7 +1,6 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include "g_defs.h"
 extern uint8_t *VGA;
 extern uint8_t *VRAM;
 
