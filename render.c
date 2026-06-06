@@ -20,14 +20,14 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle)
 	*ptr_y = (int)((radius_x * SIN[angle]) + (radius_y * COS[angle]));
 }
 
-void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
+void mapshift(Node *node, const Coords *player, const Mouse *mouse)
 {
 	int i;
 
-	int x1 = wall->x1;
-	int y1 = wall->y1;
-	int x2 = wall->x2;
-	int y2 = wall->y2;
+	int x1 = node->x[0];
+	int y1 = node->y[0];
+	int x2 = node->x[1];
+	int y2 = node->y[1];
 	int r_w[8];
 
 	int sx1, sx2, sy1, sy2;

@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
 	init_tables();
 
 	if(argc == 2) {
-		if(openmap(argv[1], 4)) {
+		if(openmap(argv[1])) {
 			printf("Could not find map \'%s\'\n", argv[1]);
 			exit = 1;
 		}
 	} else if(argc == 3 && !strcmp(argv[1],"-e")) {
-		if(editmap(argv[2], 4)) {
+		if(editmap(argv[2])) {
 			printf("Could not edit map \'%s\'\n", argv[2]);
 			exit = 1;
 		}

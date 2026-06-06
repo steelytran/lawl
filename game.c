@@ -8,18 +8,24 @@
 #include "i_defs.h"
 #include "colors.h"
 
-int openmap(char* name, int size)
+int openmap(char* name)
 {
-	Wall tree[4];
+	int i;
+	int node_n;
+	Node *tree = NULL;
 
 	Coords player = {0, 0};
 	Mouse minput = {0, 0, 0};
 
-	FILE *map = fopen(name, "rb");
-		if(map == NULL) return 1;
+	FILE *mapfile = fopen(name, "rb");
+		if(mapfile == NULL) return 1;
 
-	fread(tree, sizeof(Wall), size, map);
-	fclose(map);
+	fread(&node_n, sizeof(int), 1, mapfile);
+
+	tree = calloc(node_n, sizeof(Node));
+
+	fread(tree, sizeof(Node), node_n, mapfile);
+	fclose(mapfile);
 	set_mode(0x13);
 
 	while(!keystate[K_ESC]) {
@@ -29,10 +35,8 @@ int openmap(char* name, int size)
 		mouseinput(&minput, 0x0b);
 		keyinput(&player, minput.x);
 
-		mapshift(&tree[0], &player, &minput);
-		mapshift(&tree[1], &player, &minput);	/*temporary solution*/
-		mapshift(&tree[2], &player, &minput);
-		mapshift(&tree[3], &player, &minput);
+		for(i=0; i<node_n; i++)
+			mapshift(&tree[i], &player, &minput);
 
 		while ((inp(0x3DA) & 0x08));
 		while (!(inp(0x3DA) & 0x08));
@@ -40,5 +44,6 @@ int openmap(char* name, int size)
 		t1 = tickcount;
 	}
 	set_mode(0x03);
+	free(tree);
 	return 0;
 } 

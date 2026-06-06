@@ -51,6 +51,7 @@
 #define K_RBRACKET 0x1B
 #define K_LSHIFT 0x2A
 #define K_BACKSLASH 0x2B
+#define K_LCTRL 0x1D
 #define K_A 0x1E
 #define K_S 0x1F
 #define K_D 0x20
@@ -91,13 +92,13 @@
 typedef struct {
         int x;
         int y;
-        uint8_t bx;
-} Mouse;
+} Coords;
 
 typedef struct {
-        int x;
-        int y;
-} Coords;
+	int x;
+	int y;
+        uint8_t bx;
+} Mouse;
 
 typedef struct {
 	int x1;
@@ -106,7 +107,12 @@ typedef struct {
 	int y2;
 } Wall;
 
-void mapshift(Wall *wall, const Coords *player, const Mouse *mouse);
+typedef struct {
+	int x[2];
+	int y[2];
+} Node;
+
+void mapshift(Node *wall, const Coords *player, const Mouse *mouse);
 void mapview(const Coords *player, const Mouse *mouse);
 void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
 
@@ -118,8 +124,10 @@ void mouserange(int x, int y);
 void mouseinput(Mouse *p, uint8_t ax);
 void keyinput(Coords *player, int angle);
 
-int editmap(char* name, int size);
-int openmap(char* name, int size);
+int editmap(char* name);
+int openmap(char* name);
+
+void cursor(Mouse *m, int* cursor);
 
 extern float SIN[360];
 extern float COS[360];
@@ -130,7 +138,7 @@ extern uint8_t t1;
 
 extern volatile uint8_t keystate[128];
 
-extern int cursor1[];
+extern int cursor_1[];
 extern int crosshair[];
 
 #endif
