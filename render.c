@@ -36,8 +36,8 @@ void mapshift(Wall *wall, const Coords *player, const Mouse *mouse)
 
 	const int NEARPLANE = -10;
 
-	rotate(&x1, &y1, player, mouse->angle);
-	rotate(&x2, &y2, player, mouse->angle);
+	rotate(&x1, &y1, player, mouse->x);
+	rotate(&x2, &y2, player, mouse->x);
 
 	/*RELATIVE VIEW*/
 

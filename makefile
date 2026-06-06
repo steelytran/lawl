@@ -27,4 +27,4 @@ $(ODIR)/%.obj: %.c
 clean:
 	-@rm -f $(ODIR)/*.obj
 	-@rm -f $(EXEC)
-	-@rm -f $(wildcard *.err)
+	-@rm -f *.err

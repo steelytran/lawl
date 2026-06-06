@@ -28,19 +28,33 @@ int keychar()
 	return regs.h.al;
 }
 
-void mouseinput(Mouse *p)
+void mouserange(int x, int y)
 {
-        regs.w.ax = 0x0b;
+	regs.w.ax = 0x07;
+	regs.w.cx = 0;
+	regs.w.dx = x;
         int386(0x33, &regs, &regs);
 
-	p->x = (signed short)regs.w.cx;
+	regs.w.ax = 0x08;
+	regs.w.cx = 0;
+	regs.w.dx = y;
+        int386(0x33, &regs, &regs);
+}
+
+void mouseinput(Mouse *p, uint8_t ax)
+{
+        regs.w.ax = ax;
+        int386(0x33, &regs, &regs);
+
+	if(ax == 0x0b) {
+		p->x+= 360 - (signed short)regs.w.cx;
+		p->x%=360;
+		
+		if(p->x<1) {p->x += 359;}
+	} else{p->x = (signed short)regs.w.cx;}
+	
         p->y = (signed short)regs.w.dx;
         p->bx = regs.w.bx;
-
-	p->angle+= 360 - p->x;
-	p->angle%=360;
-	
-	if(p->angle<1){p->angle += 359;}
 }
 
 void keyinput(Coords *player, int angle)

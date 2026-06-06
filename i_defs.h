@@ -92,12 +92,11 @@ typedef struct {
         int x;
         int y;
         uint8_t bx;
-	int angle;
 } Mouse;
 
 typedef struct {
-        float x;
-        float y;
+        int x;
+        int y;
 } Coords;
 
 typedef struct {
@@ -114,12 +113,13 @@ void rotate(int *ptr_x, int *ptr_y, const Coords *p, int angle);
 void interrupt keyisr(void);
 void interrupt tick(void);
 void tickrate(int div);
-void mouseinit();
-void mouseinput(Mouse *p);
+
+void mouserange(int x, int y);
+void mouseinput(Mouse *p, uint8_t ax);
 void keyinput(Coords *player, int angle);
 
-int editmap(char* name, Wall *tree, int size);
-int openmap(char* name, Wall *tree, int size);
+int editmap(char* name, int size);
+int openmap(char* name, int size);
 
 extern float SIN[360];
 extern float COS[360];
