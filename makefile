@@ -2,7 +2,7 @@ CC = wcc386
 LINKER = wlink
 
 CFLAGS = -zq -mf -3r -fpc
-LFLAGS = sys dos32a op stub=$(WATCOM)/binw/dos32a.exe libpath $(WATCOM)\lib386\dos
+LFLAGS = sys dos32a op stub=$(WATCOM)/binw/dos32a.exe libpath $(WATCOM)/lib386/dos
 
 MAIN_SRC = main.c
 EXEC = ../a.exe
