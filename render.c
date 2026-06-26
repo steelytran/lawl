@@ -29,10 +29,12 @@ void mapshift(Node *node, const Coords *player, const Mouse *mouse)
 	int x2 = node->x[1];
 	int y2 = node->y[1];
 	int r_w[8];
+	uint8_t in;
+
 
 	int sx1, sx2, sy1, sy2;
 
-	int color; /*testing*/
+	uint8_t color; /*testing*/
 
 	const int NEARPLANE = -10;
 
@@ -72,12 +74,17 @@ void mapshift(Node *node, const Coords *player, const Mouse *mouse)
 
 		color = (sx1>sx2)?RED:BLUE;
 
-		line(r_w[0], r_w[1], r_w[2], r_w[3], color);
-		line(r_w[4], r_w[5], r_w[6], r_w[7], color);
+		line(r_w[0], r_w[1], r_w[2], r_w[3], YELLOW);
+		line(r_w[4], r_w[5], r_w[6], r_w[7], MAGENTA);
 
 		if(y1<NEARPLANE)
-			line(r_w[6], r_w[7], r_w[0], r_w[1], color);
+			line(r_w[6], r_w[7], r_w[0], r_w[1], RED);
 		if(y2<NEARPLANE)
-			line(r_w[2], r_w[3], r_w[4], r_w[5], color);
+			line(r_w[2], r_w[3], r_w[4], r_w[5], LIGHTGREEN);
+
+		line(r_w[0], r_w[1], r_w[4], r_w[5], WHITE);
+
+		in = (fill(&r_w, RED))?CYAN:G5;
+		pixel(X_CENTER, Y_CENTER, in);
 	}
 }

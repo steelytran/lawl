@@ -147,3 +147,38 @@ void circle(int x, int y, int radius, uint8_t color)
 	dy = (int)((radius * SIN_ACOS[(int)(n>>6)]) >> 16);
 	}
 }
+
+int edge(int x, int y, int ax, int bx, int ay, int by)
+{
+	int dx, dy;
+	int point;
+
+	dx = bx - ax;
+	dy = by - ay;
+
+	point = (x - ax) * dy - (y - ay) * dx;
+
+	return (point>0?1:0);
+}
+
+int fill(int *p, uint8_t color)
+{
+	int i, j;
+	int point[3];
+/*
+
+	for() {
+		for() {
+			edge(i, j, p[0], p[1], p[4], p[5]);
+			edge(i, j, p[6], p[7], p[0], p[1]);
+			edge(i, j, p[4], p[5], p[6], p[7]);
+		}
+	}
+*/
+	point[0] = edge(X_CENTER, Y_CENTER, p[0], p[1], p[4], p[5]);
+	point[1] = edge(X_CENTER, Y_CENTER, p[6], p[7], p[0], p[1]);
+	point[2] = edge(X_CENTER, Y_CENTER, p[4], p[5], p[6], p[7]);
+
+	if(point[0]>0 && point[1]>0 && point[2]>0) return 1;
+	return 0;
+}
